@@ -1,4 +1,4 @@
-import { FileText, Package, Users, Settings, LayoutGrid, DollarSign, FileSpreadsheet } from 'lucide-react';
+import { FileText, Package, Users, Settings, LayoutGrid, DollarSign } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import {
   Sidebar,
@@ -16,7 +16,6 @@ const menuItems = [
   { title: 'Controle', url: '/controle', icon: FileText },
   { title: 'Máscara do Fornecedor', url: '/mascara-fornecedor', icon: Package },
   { title: 'Rateio', url: '/rateio', icon: DollarSign },
-  { title: 'Resumo Financeiro', url: '/resumo-financeiro', icon: FileSpreadsheet },
   { title: 'Análise Financeira', url: '/analise-financeira', icon: LayoutGrid },
   { title: 'Contatos', url: '/contatos', icon: Users },
   { title: 'Administração', url: '/administracao', icon: Settings },

@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { useApp } from '@/contexts/AppContext';
+import { toast } from 'sonner';
 
 // Constantes fixas
 const CUSTO_CAPITAL_REAL_MES = 0.014174395484882085;
@@ -49,6 +52,9 @@ const formatPercent = (value: number): string => {
 };
 
 const AnaliseFinanceira = () => {
+  const navigate = useNavigate();
+  const { selectedQuote, quoteProducts, rateioServices, quoteConfigs } = useApp();
+
   const [inputs, setInputs] = useState<InputData>({
     receitasBrutas: 0,
     prv: 0,
@@ -62,6 +68,50 @@ const AnaliseFinanceira = () => {
     margemLiquida: 0,
     lucroLiquido: 0,
   });
+
+  // Check if quote is selected
+  useEffect(() => {
+    if (!selectedQuote) {
+      toast.error('Selecione uma cotação primeiro');
+      navigate('/');
+    }
+  }, [selectedQuote, navigate]);
+
+  // Auto-fill inputs when data changes
+  useEffect(() => {
+    if (!selectedQuote) return;
+
+    const products = quoteProducts[selectedQuote.id] || [];
+    const services = rateioServices[selectedQuote.id] || [];
+    const config = quoteConfigs[selectedQuote.id];
+
+    // Receita Bruta: total from Máscara do Fornecedor
+    const receitaBruta = products.reduce((sum, p) => sum + (p.precoVenda * p.quantidade), 0);
+
+    // PRV: from Controle config
+    const prv = config?.prv || 0;
+
+    // Custo do produto: sum of cost column from Máscara do Fornecedor
+    const custoProduto = products.reduce((sum, p) => sum + (p.custoUnitario * p.quantidade), 0);
+
+    // Rateio: total from Rateio page
+    const rateio = services.reduce((sum, s) => sum + s.valorComImpostos, 0);
+
+    // Imposto: 25% of Receita Bruta
+    const imposto = receitaBruta * 0.25;
+
+    setInputs({
+      receitasBrutas: receitaBruta,
+      prv: prv,
+      custoProduto: custoProduto,
+      rateio: rateio,
+      imposto: imposto,
+    });
+  }, [selectedQuote, quoteProducts, rateioServices, quoteConfigs]);
+
+  if (!selectedQuote) {
+    return null;
+  }
 
   const calcularFluxoCaixa = (inputs: InputData): OutputData => {
     console.log('Iniciando cálculo com inputs:', inputs);
@@ -196,7 +246,7 @@ const AnaliseFinanceira = () => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="receitasBrutas">Receitas Brutas</Label>
+                <Label htmlFor="receitasBrutas">Receita Bruta</Label>
                 <Input
                   id="receitasBrutas"
                   type="number"
@@ -204,7 +254,8 @@ const AnaliseFinanceira = () => {
                   value={inputs.receitasBrutas || ''}
                   onChange={(e) => handleInputChange('receitasBrutas', e.target.value)}
                   placeholder="0.00"
-                  className="bg-background"
+                  className="bg-muted"
+                  readOnly
                 />
               </div>
 
@@ -217,7 +268,8 @@ const AnaliseFinanceira = () => {
                   value={inputs.prv || ''}
                   onChange={(e) => handleInputChange('prv', e.target.value)}
                   placeholder="0.00"
-                  className="bg-background"
+                  className="bg-muted"
+                  readOnly
                 />
               </div>
 
@@ -230,7 +282,8 @@ const AnaliseFinanceira = () => {
                   value={inputs.custoProduto || ''}
                   onChange={(e) => handleInputChange('custoProduto', e.target.value)}
                   placeholder="0.00"
-                  className="bg-background"
+                  className="bg-muted"
+                  readOnly
                 />
               </div>
 
@@ -243,7 +296,8 @@ const AnaliseFinanceira = () => {
                   value={inputs.rateio || ''}
                   onChange={(e) => handleInputChange('rateio', e.target.value)}
                   placeholder="0.00"
-                  className="bg-background"
+                  className="bg-muted"
+                  readOnly
                 />
               </div>
 
@@ -256,7 +310,8 @@ const AnaliseFinanceira = () => {
                   value={inputs.imposto || ''}
                   onChange={(e) => handleInputChange('imposto', e.target.value)}
                   placeholder="0.00"
-                  className="bg-background"
+                  className="bg-muted"
+                  readOnly
                 />
               </div>
             </div>
