@@ -16,8 +16,8 @@ const menuItems = [
   { title: 'Controle', url: '/controle', icon: FileText },
   { title: 'Máscara do Fornecedor', url: '/mascara-fornecedor', icon: Package },
   { title: 'Rateio', url: '/rateio', icon: DollarSign },
-  { title: 'Resumo Financeiro', url: '/resumo-financeiro', icon: Calculator },
   { title: 'Contatos', url: '/contatos', icon: Users },
+  { title: 'Resumo Financeiro', url: '/resumo-financeiro', icon: Calculator },
   { title: 'Administração', url: '/administracao', icon: Settings },
 ];
 
