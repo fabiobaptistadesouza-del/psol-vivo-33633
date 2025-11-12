@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useApp } from '@/contexts/AppContext';
 import { formatCurrency } from '@/lib/formatters';
 import { generateProposalPDF } from '@/lib/pdfGenerator';
+import { generateProposalDOCX } from '@/lib/docxGenerator';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 import { Download, FileText } from 'lucide-react';
@@ -205,6 +206,35 @@ export default function ResumoFinanceiro() {
     toast.success('Proposta gerada com sucesso');
   };
 
+  const handleViewProposalWord = async () => {
+    const products = quoteProducts[selectedQuote.id] || [];
+    const contacts = clientContacts[selectedQuote.id];
+    
+    if (products.length === 0) {
+      toast.error('Adicione produtos antes de gerar a proposta');
+      return;
+    }
+
+    if (!client) {
+      toast.error('Cliente não encontrado');
+      return;
+    }
+
+    try {
+      await generateProposalDOCX(
+        selectedQuote.codigo,
+        client.razaoSocial,
+        client.cnpj,
+        products,
+        contacts
+      );
+      toast.success('Proposta Word gerada com sucesso');
+    } catch (error) {
+      console.error('Erro ao gerar proposta Word:', error);
+      toast.error('Erro ao gerar proposta Word');
+    }
+  };
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -389,6 +419,10 @@ export default function ResumoFinanceiro() {
         <Button onClick={handleViewProposal} className="flex-1">
           <FileText className="mr-2 h-4 w-4" />
           Visualizar Proposta
+        </Button>
+        <Button onClick={handleViewProposalWord} variant="secondary" className="flex-1">
+          <FileText className="mr-2 h-4 w-4" />
+          Visualizar Proposta (Word)
         </Button>
       </div>
     </div>
