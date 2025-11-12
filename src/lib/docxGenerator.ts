@@ -67,23 +67,33 @@ export const generateProposalDOCX = async (
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ text: 'Fabricante', bold: true })],
+                    children: [new Paragraph({
+                      children: [new TextRun({ text: 'Fabricante', bold: true })],
+                    })],
                     shading: { fill: 'CCCCCC' },
                   }),
                   new TableCell({
-                    children: [new Paragraph({ text: 'Descrição', bold: true })],
+                    children: [new Paragraph({
+                      children: [new TextRun({ text: 'Descrição', bold: true })],
+                    })],
                     shading: { fill: 'CCCCCC' },
                   }),
                   new TableCell({
-                    children: [new Paragraph({ text: 'Valor Unit. Venda', bold: true })],
+                    children: [new Paragraph({
+                      children: [new TextRun({ text: 'Valor Unit. Venda', bold: true })],
+                    })],
                     shading: { fill: 'CCCCCC' },
                   }),
                   new TableCell({
-                    children: [new Paragraph({ text: 'Qtd', bold: true })],
+                    children: [new Paragraph({
+                      children: [new TextRun({ text: 'Qtd', bold: true })],
+                    })],
                     shading: { fill: 'CCCCCC' },
                   }),
                   new TableCell({
-                    children: [new Paragraph({ text: 'Valor de Venda', bold: true })],
+                    children: [new Paragraph({
+                      children: [new TextRun({ text: 'Valor de Venda', bold: true })],
+                    })],
                     shading: { fill: 'CCCCCC' },
                   }),
                 ],
@@ -113,9 +123,13 @@ export const generateProposalDOCX = async (
             ],
           }),
           new Paragraph({
-            text: `Valor Total: ${formatCurrency(totalValue)}`,
+            children: [
+              new TextRun({
+                text: `Valor Total: ${formatCurrency(totalValue)}`,
+                bold: true,
+              }),
+            ],
             spacing: { before: 200, after: 400 },
-            bold: true,
           }),
         ],
       },
@@ -134,15 +148,15 @@ export const generateProposalDOCX = async (
             spacing: { after: 100 },
           }),
           new Paragraph({
-            text: `Nome: ${contacts.cliente.nome}`,
+            text: `Nome: ${contacts.contatoCliente.nome}`,
             spacing: { after: 50 },
           }),
           new Paragraph({
-            text: `Email: ${contacts.cliente.email}`,
+            text: `Email: ${contacts.contatoCliente.email}`,
             spacing: { after: 50 },
           }),
           new Paragraph({
-            text: `Telefone: ${contacts.cliente.telefone}`,
+            text: `Telefone: ${contacts.contatoCliente.telefone}`,
             spacing: { after: 200 },
           }),
           
