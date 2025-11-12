@@ -418,7 +418,7 @@ export default function ResumoFinanceiro() {
         </Button>
         <Button onClick={handleViewProposal} className="flex-1">
           <FileText className="mr-2 h-4 w-4" />
-          Visualizar Proposta
+          Visualizar Proposta (PDF)
         </Button>
         <Button onClick={handleViewProposalWord} variant="secondary" className="flex-1">
           <FileText className="mr-2 h-4 w-4" />
