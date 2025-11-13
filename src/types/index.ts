@@ -20,7 +20,7 @@ export interface Quote {
 
 export interface QuoteConfig {
   quoteId: string;
-  tipoRevenda: 'Cliente' | 'Banco';
+  prazoDepreciacao: number;
   clienteConsumidorFinal: boolean;
   prv: 30 | 45 | 60 | 75 | 90;
   insumosDolar: boolean;
