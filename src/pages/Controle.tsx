@@ -442,7 +442,7 @@ export default function Controle() {
               type="text" 
               value={config.dataPtax} 
               disabled 
-              className="mt-2" 
+              className="mt-2 w-32" 
             />
           </div>
 
@@ -454,7 +454,7 @@ export default function Controle() {
                 type="text" 
                 value={formatCurrency(config.dolarPtax)} 
                 disabled 
-                className="flex-1" 
+                className="w-32" 
               />
               <Button 
                 onClick={handleUpdateDolarPtax} 
