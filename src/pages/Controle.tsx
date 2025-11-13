@@ -350,7 +350,7 @@ export default function Controle() {
               type="text" 
               value={config.validadeProposta} 
               disabled 
-              className="mt-2" 
+              className="mt-2 w-32" 
             />
           </div>
 
@@ -361,7 +361,7 @@ export default function Controle() {
               type="text" 
               value={config.inicioReceita} 
               disabled 
-              className="mt-2" 
+              className="mt-2 w-32" 
             />
           </div>
 
