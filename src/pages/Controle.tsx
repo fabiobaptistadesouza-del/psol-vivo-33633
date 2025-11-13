@@ -34,7 +34,7 @@ export default function Controle() {
   const [updatedWorkbook, setUpdatedWorkbook] = useState<XLSX.WorkBook | null>(null);
   const [canDownloadExcel, setCanDownloadExcel] = useState(false);
   const [showPrvAlert, setShowPrvAlert] = useState(false);
-  const [prazoDepreciacaoError, setPrazoDepreciacaoError] = useState<string>('');
+  
 
   useEffect(() => {
     if (!selectedQuote) {
@@ -231,41 +231,6 @@ export default function Controle() {
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Configurações</h2>
         <div className="space-y-6">
-          {/* Prazo de Depreciação */}
-          <div>
-            <Label htmlFor="prazoDepreciacao" className="mb-3 block">Prazo de depreciação</Label>
-            <Input
-              id="prazoDepreciacao"
-              type="number"
-              min="1"
-              max="120"
-              value={config.prazoDepreciacao || ''}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (isNaN(value) || value < 1 || value > 120) {
-                  setPrazoDepreciacaoError('Este campo aceita apenas valores de 1 a 120');
-                  if (!isNaN(value)) {
-                    handleConfigChange({ prazoDepreciacao: value });
-                  }
-                } else {
-                  setPrazoDepreciacaoError('');
-                  handleConfigChange({ prazoDepreciacao: value });
-                }
-              }}
-              onBlur={(e) => {
-                const value = parseInt(e.target.value);
-                if (isNaN(value) || value < 1 || value > 120) {
-                  setPrazoDepreciacaoError('Este campo aceita apenas valores de 1 a 120');
-                } else {
-                  setPrazoDepreciacaoError('');
-                }
-              }}
-              className={`w-32 ${prazoDepreciacaoError ? 'border-red-500' : ''}`}
-            />
-            {prazoDepreciacaoError && (
-              <p className="text-sm text-red-500 mt-1">{prazoDepreciacaoError}</p>
-            )}
-          </div>
 
           {/* Cliente Consumidor Final */}
           <div>
