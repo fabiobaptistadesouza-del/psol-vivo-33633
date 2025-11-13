@@ -138,25 +138,25 @@ export default function ResumoFinanceiro() {
     }
     setAlcada(alcadaCalc);
 
-    // Cálculos de mês zero (sem considerar depreciação)
-    // Margem Direta - mês zero = Receita Líquida - Custo Total
-    const margemDiretaMesZeroCalc = receitaLiquidaCalc - custoTotalCalc;
+    // Cálculos de mês zero
+    // Margem Direta - mês zero = Impostos + Custo Total
+    const margemDiretaMesZeroCalc = impostosCalc + custoTotalCalc;
     setMargemDiretaMesZero(margemDiretaMesZeroCalc);
 
-    // EBITDA - mês zero = Margem Direta - mês zero
-    const ebitdaMesZeroCalc = margemDiretaMesZeroCalc;
+    // EBITDA - mês zero = Impostos + Custo Total
+    const ebitdaMesZeroCalc = impostosCalc + custoTotalCalc;
     setEbitdaMesZero(ebitdaMesZeroCalc);
 
-    // Margem EBIT - mês zero = (EBITDA - mês zero ÷ Receita Líquida) × 100
-    const margemEbitMesZeroCalc = receitaLiquidaCalc > 0 ? (ebitdaMesZeroCalc / receitaLiquidaCalc) * 100 : 0;
+    // Margem EBIT - mês zero = Impostos + Custo Total
+    const margemEbitMesZeroCalc = impostosCalc + custoTotalCalc;
     setMargemEbitMesZero(margemEbitMesZeroCalc);
 
-    // IR/CSLL - mês zero = Margem Direta - mês zero × 0,34
-    const irCsllMesZeroCalc = margemDiretaMesZeroCalc * 0.34;
+    // IR/CSLL - mês zero = 0,34 × Margem Ebit - mês zero
+    const irCsllMesZeroCalc = margemEbitMesZeroCalc * 0.34;
     setIrCsllMesZero(irCsllMesZeroCalc);
 
-    // Lucro líquido - mês zero = Margem Direta - mês zero - IR/CSLL - mês zero
-    const lucroLiquidoMesZeroCalc = margemDiretaMesZeroCalc - irCsllMesZeroCalc;
+    // Lucro líquido - mês zero = IR/CSLL - mês zero − Margem Ebit - mês zero
+    const lucroLiquidoMesZeroCalc = irCsllMesZeroCalc - margemEbitMesZeroCalc;
     setLucroLiquidoMesZero(lucroLiquidoMesZeroCalc);
 
   }, [selectedQuote, quoteProducts, rateioServices, quoteConfigs, adminSettings]);
@@ -363,8 +363,8 @@ export default function ResumoFinanceiro() {
                 <Input
                   id="margemEbitMesZero"
                   type="text"
-                  value={`${margemEbitMesZero.toFixed(1)}%`}
-                  placeholder="0,0%"
+                  value={formatCurrency(margemEbitMesZero)}
+                  placeholder="R$ 0,00"
                   className="mt-2 bg-muted"
                   readOnly
                 />
