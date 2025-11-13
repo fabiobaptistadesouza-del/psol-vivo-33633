@@ -34,6 +34,7 @@ export default function Controle() {
   const [updatedWorkbook, setUpdatedWorkbook] = useState<XLSX.WorkBook | null>(null);
   const [canDownloadExcel, setCanDownloadExcel] = useState(false);
   const [showPrvAlert, setShowPrvAlert] = useState(false);
+  const [prazoDepreciacaoError, setPrazoDepreciacaoError] = useState<string>('');
 
   useEffect(() => {
     if (!selectedQuote) {
@@ -54,7 +55,7 @@ export default function Controle() {
 
   const config = quoteConfigs[selectedQuote.id] || {
     quoteId: selectedQuote.id,
-    tipoRevenda: 'Cliente' as const,
+    prazoDepreciacao: 12,
     clienteConsumidorFinal: false,
     prv: 30 as const,
     insumosDolar: false,
@@ -230,23 +231,40 @@ export default function Controle() {
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Configurações</h2>
         <div className="space-y-6">
-          {/* Tipo de Revenda */}
+          {/* Prazo de Depreciação */}
           <div>
-            <Label className="mb-3 block">Tipo de Revenda</Label>
-            <RadioGroup 
-              value={config.tipoRevenda}
-              onValueChange={(value) => handleConfigChange({ tipoRevenda: value as 'Cliente' | 'Banco' })}
-              className="flex gap-4"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Cliente" id="cliente" />
-                <Label htmlFor="cliente" className="font-normal cursor-pointer">Cliente</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="Banco" id="banco" />
-                <Label htmlFor="banco" className="font-normal cursor-pointer">Banco</Label>
-              </div>
-            </RadioGroup>
+            <Label htmlFor="prazoDepreciacao" className="mb-3 block">Prazo de depreciação</Label>
+            <Input
+              id="prazoDepreciacao"
+              type="number"
+              min="1"
+              max="120"
+              value={config.prazoDepreciacao || ''}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                if (isNaN(value) || value < 1 || value > 120) {
+                  setPrazoDepreciacaoError('Este campo aceita apenas valores de 1 a 120');
+                  if (!isNaN(value)) {
+                    handleConfigChange({ prazoDepreciacao: value });
+                  }
+                } else {
+                  setPrazoDepreciacaoError('');
+                  handleConfigChange({ prazoDepreciacao: value });
+                }
+              }}
+              onBlur={(e) => {
+                const value = parseInt(e.target.value);
+                if (isNaN(value) || value < 1 || value > 120) {
+                  setPrazoDepreciacaoError('Este campo aceita apenas valores de 1 a 120');
+                } else {
+                  setPrazoDepreciacaoError('');
+                }
+              }}
+              className={prazoDepreciacaoError ? 'border-red-500' : ''}
+            />
+            {prazoDepreciacaoError && (
+              <p className="text-sm text-red-500 mt-1">{prazoDepreciacaoError}</p>
+            )}
           </div>
 
           {/* Cliente Consumidor Final */}

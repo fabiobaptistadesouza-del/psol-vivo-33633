@@ -91,8 +91,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       [quoteId]: {
         ...(prev[quoteId] || { 
           quoteId, 
-          tipoRevenda: 'Cliente' as const, 
-          clienteConsumidorFinal: false, 
+          prazoDepreciacao: 12, 
+          clienteConsumidorFinal: false,
           prv: 30 as const,
           insumosDolar: false,
           clausulaReajustePtax: false,
