@@ -10,7 +10,8 @@ import { generateProposalPDF } from '@/lib/pdfGenerator';
 import { generateProposalDOCX } from '@/lib/docxGenerator';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, ChevronDown } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 // Tabela de coeficientes baseada no PRV
 const COEFICIENTES: Record<number, number> = {
@@ -40,6 +41,17 @@ export default function ResumoFinanceiro() {
   const [margemLiquida, setMargemLiquida] = useState(0);
   const [vpl, setVpl] = useState(0);
   const [alcada, setAlcada] = useState('');
+
+  // Estados para cálculos de mês zero
+  const [margemDiretaMesZero, setMargemDiretaMesZero] = useState(0);
+  const [ebitdaMesZero, setEbitdaMesZero] = useState(0);
+  const [margemEbitMesZero, setMargemEbitMesZero] = useState(0);
+  const [irCsllMesZero, setIrCsllMesZero] = useState(0);
+  const [lucroLiquidoMesZero, setLucroLiquidoMesZero] = useState(0);
+
+  // Estados para controle de expansão das seções
+  const [isCustoOpen, setIsCustoOpen] = useState(false);
+  const [isReceitaOpen, setIsReceitaOpen] = useState(false);
 
   useEffect(() => {
     if (!selectedQuote) {
@@ -125,6 +137,27 @@ export default function ResumoFinanceiro() {
       alcadaCalc = 'CDG';
     }
     setAlcada(alcadaCalc);
+
+    // Cálculos de mês zero (sem considerar depreciação)
+    // Margem Direta - mês zero = Receita Líquida - Custo Total
+    const margemDiretaMesZeroCalc = receitaLiquidaCalc - custoTotalCalc;
+    setMargemDiretaMesZero(margemDiretaMesZeroCalc);
+
+    // EBITDA - mês zero = Margem Direta - mês zero
+    const ebitdaMesZeroCalc = margemDiretaMesZeroCalc;
+    setEbitdaMesZero(ebitdaMesZeroCalc);
+
+    // Margem EBIT - mês zero = (EBITDA - mês zero ÷ Receita Líquida) × 100
+    const margemEbitMesZeroCalc = receitaLiquidaCalc > 0 ? (ebitdaMesZeroCalc / receitaLiquidaCalc) * 100 : 0;
+    setMargemEbitMesZero(margemEbitMesZeroCalc);
+
+    // IR/CSLL - mês zero = Margem Direta - mês zero × 0,34
+    const irCsllMesZeroCalc = margemDiretaMesZeroCalc * 0.34;
+    setIrCsllMesZero(irCsllMesZeroCalc);
+
+    // Lucro líquido - mês zero = Margem Direta - mês zero - IR/CSLL - mês zero
+    const lucroLiquidoMesZeroCalc = margemDiretaMesZeroCalc - irCsllMesZeroCalc;
+    setLucroLiquidoMesZero(lucroLiquidoMesZeroCalc);
 
   }, [selectedQuote, quoteProducts, rateioServices, quoteConfigs, adminSettings]);
 
@@ -242,130 +275,214 @@ export default function ResumoFinanceiro() {
         <p className="text-muted-foreground">Visão consolidada dos cálculos financeiros</p>
       </div>
 
-      {/* Campos Principais */}
+      {/* Seção 1: Custo + impostos */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Valores Financeiros</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <Label htmlFor="receitaBruta">Receita Bruta</Label>
-            <Input
-              id="receitaBruta"
-              type="text"
-              value={formatCurrency(receitaBruta)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
+        <Collapsible open={isCustoOpen} onOpenChange={setIsCustoOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h2 className="text-lg font-semibold">Custo + impostos</h2>
+            <ChevronDown 
+              className={`h-5 w-5 transition-transform duration-200 ${isCustoOpen ? 'rotate-0' : '-rotate-90'}`}
             />
-          </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <Label htmlFor="impostos">Impostos</Label>
+                <Input
+                  id="impostos"
+                  type="text"
+                  value={formatCurrency(impostos)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="impostos">Impostos</Label>
-            <Input
-              id="impostos"
-              type="text"
-              value={formatCurrency(impostos)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="custoProduto">Custo do Produto</Label>
+                <Input
+                  id="custoProduto"
+                  type="text"
+                  value={formatCurrency(custoProduto)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="receitaLiquida">Receita Líquida</Label>
-            <Input
-              id="receitaLiquida"
-              type="text"
-              value={formatCurrency(receitaLiquida)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="rateio">Rateio</Label>
+                <Input
+                  id="rateio"
+                  type="text"
+                  value={formatCurrency(rateio)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="custoProduto">Custo do Produto</Label>
-            <Input
-              id="custoProduto"
-              type="text"
-              value={formatCurrency(custoProduto)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="custoTotal">Custo Total</Label>
+                <Input
+                  id="custoTotal"
+                  type="text"
+                  value={formatCurrency(custoTotal)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="rateio">Rateio</Label>
-            <Input
-              id="rateio"
-              type="text"
-              value={formatCurrency(rateio)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="margemDiretaMesZero">Margem Direta - mês zero</Label>
+                <Input
+                  id="margemDiretaMesZero"
+                  type="text"
+                  value={formatCurrency(margemDiretaMesZero)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="custoTotal">Custo Total</Label>
-            <Input
-              id="custoTotal"
-              type="text"
-              value={formatCurrency(custoTotal)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="ebitdaMesZero">Ebitda - mês zero</Label>
+                <Input
+                  id="ebitdaMesZero"
+                  type="text"
+                  value={formatCurrency(ebitdaMesZero)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="margemDireta">Margem Direta</Label>
-            <Input
-              id="margemDireta"
-              type="text"
-              value={formatCurrency(margemDireta)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="margemEbitMesZero">Margem Ebit - mês zero</Label>
+                <Input
+                  id="margemEbitMesZero"
+                  type="text"
+                  value={`${margemEbitMesZero.toFixed(1)}%`}
+                  placeholder="0,0%"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="inadimplencia">Inadimplência</Label>
-            <Input
-              id="inadimplencia"
-              type="text"
-              value={formatCurrency(inadimplencia)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="irCsllMesZero">IR/CSLL - mês zero</Label>
+                <Input
+                  id="irCsllMesZero"
+                  type="text"
+                  value={formatCurrency(irCsllMesZero)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="ebitda">EBITDA</Label>
-            <Input
-              id="ebitda"
-              type="text"
-              value={formatCurrency(ebitda)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
-            />
-          </div>
+              <div>
+                <Label htmlFor="lucroLiquidoMesZero">Lucro líquido - mês zero</Label>
+                <Input
+                  id="lucroLiquidoMesZero"
+                  type="text"
+                  value={formatCurrency(lucroLiquidoMesZero)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </Card>
 
-          <div>
-            <Label htmlFor="irCsll">IR/CSLL (34%)</Label>
-            <Input
-              id="irCsll"
-              type="text"
-              value={formatCurrency(irCsll)}
-              placeholder="R$ 0,00"
-              className="mt-2 bg-muted"
-              readOnly
+      {/* Seção 2: Receita */}
+      <Card className="p-6">
+        <Collapsible open={isReceitaOpen} onOpenChange={setIsReceitaOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h2 className="text-lg font-semibold">Receita</h2>
+            <ChevronDown 
+              className={`h-5 w-5 transition-transform duration-200 ${isReceitaOpen ? 'rotate-0' : '-rotate-90'}`}
             />
-          </div>
-        </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <Label htmlFor="receitaBruta">Receita Bruta</Label>
+                <Input
+                  id="receitaBruta"
+                  type="text"
+                  value={formatCurrency(receitaBruta)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="receitaLiquida">Receita Líquida</Label>
+                <Input
+                  id="receitaLiquida"
+                  type="text"
+                  value={formatCurrency(receitaLiquida)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="margemDireta">Margem Direta</Label>
+                <Input
+                  id="margemDireta"
+                  type="text"
+                  value={formatCurrency(margemDireta)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="inadimplencia">Inadimplência</Label>
+                <Input
+                  id="inadimplencia"
+                  type="text"
+                  value={formatCurrency(inadimplencia)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="ebitda">EBITDA</Label>
+                <Input
+                  id="ebitda"
+                  type="text"
+                  value={formatCurrency(ebitda)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="irCsll">IR/CSLL (34%)</Label>
+                <Input
+                  id="irCsll"
+                  type="text"
+                  value={formatCurrency(irCsll)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </Card>
 
       {/* Campos de Destaque */}
