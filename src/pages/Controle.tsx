@@ -260,7 +260,7 @@ export default function Controle() {
                   setPrazoDepreciacaoError('');
                 }
               }}
-              className={prazoDepreciacaoError ? 'border-red-500' : ''}
+              className={`w-32 ${prazoDepreciacaoError ? 'border-red-500' : ''}`}
             />
             {prazoDepreciacaoError && (
               <p className="text-sm text-red-500 mt-1">{prazoDepreciacaoError}</p>
