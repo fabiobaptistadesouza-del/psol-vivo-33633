@@ -28,7 +28,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useApp } from '@/contexts/AppContext';
-import { mockProducts } from '@/data/mockData';
 import { QuoteProduct } from '@/types';
 import { formatCurrency } from '@/lib/formatters';
 import { generateBulkProductTemplate, parseBulkProductFile } from '@/lib/excelGenerator';
@@ -36,7 +35,7 @@ import { toast } from 'sonner';
 
 export default function MascaraFornecedor() {
   const navigate = useNavigate();
-  const { selectedQuote, quoteProducts, addProductToQuote, updateQuoteProduct, removeProductFromQuote } = useApp();
+  const { selectedQuote, quoteProducts, addProductToQuote, updateQuoteProduct, removeProductFromQuote, lpuProducts } = useApp();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
@@ -55,9 +54,11 @@ export default function MascaraFornecedor() {
   }
 
   const products = quoteProducts[selectedQuote.id] || [];
+  
+  const availableProducts = lpuProducts.length > 0 ? lpuProducts : [];
 
   const handleAddProduct = () => {
-    const product = mockProducts.find(p => p.id === selectedProduct);
+    const product = availableProducts.find(p => p.id === selectedProduct);
     if (!product || precoVenda <= 0) return;
 
     const quoteProduct: QuoteProduct = {
@@ -76,7 +77,7 @@ export default function MascaraFornecedor() {
     toast.success('Produto adicionado');
   };
 
-  const selectedProductData = mockProducts.find(p => p.id === selectedProduct);
+  const selectedProductData = availableProducts.find(p => p.id === selectedProduct);
 
   const handleUpdateQuantity = (productId: string, newQuantity: number) => {
     updateQuoteProduct(selectedQuote.id, productId, { quantidade: newQuantity });
@@ -174,7 +175,7 @@ export default function MascaraFornecedor() {
                 <Label>Produto</Label>
                 <Select value={selectedProduct} onValueChange={(value) => {
                   setSelectedProduct(value);
-                  const product = mockProducts.find(p => p.id === value);
+                  const product = availableProducts.find(p => p.id === value);
                   if (product) {
                     setPrecoVenda(product.custoUnitario);
                   }
@@ -183,11 +184,17 @@ export default function MascaraFornecedor() {
                     <SelectValue placeholder="Selecione um produto..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockProducts.map(product => (
-                      <SelectItem key={product.id} value={product.id}>
-                        {product.descricao} - {product.fabricante}
-                      </SelectItem>
-                    ))}
+                    {availableProducts.length > 0 ? (
+                      availableProducts.map(product => (
+                        <SelectItem key={product.id} value={product.id}>
+                          {product.descricao} - {product.fabricante}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <div className="p-2 text-sm text-muted-foreground">
+                        Nenhum produto disponível. Faça upload da LPU na página de Administração.
+                      </div>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
