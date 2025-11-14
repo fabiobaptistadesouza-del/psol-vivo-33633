@@ -56,9 +56,9 @@ export default function Administracao() {
         descricao: row['Descrição'] || row['descricao'] || row['Descricao'] || '',
         idFamiliaRange: row['ID Familia Range'] || row['idFamiliaRange'] || row['Família'] || '',
         categoria: (row['Categoria'] || row['categoria'] || 'HW') as 'HW' | 'SW' | 'SERV',
-        variacaoCambial: row['Variação Cambial'] === 'Sim' || row['variacaoCambial'] === true || false,
-        custoUnitario: Number(row['Custo Unitário'] || row['custoUnitario'] || row['Custo'] || 0),
-        precoVenda: Number(row['Preço de Venda'] || row['precoVenda'] || row['Preço'] || row['Custo Unitário'] || row['custoUnitario'] || 0),
+        variacaoCambial: row['Variação Cambial'] === 'Sim' || row['Variação cambial'] === 'Sim' || row['variacaoCambial'] === true || false,
+        custoUnitario: Number(row['Custo Unitário'] || row['Custo unitário'] || row['custoUnitario'] || row['Custo'] || 0),
+        precoVenda: Number(row['Preço de Venda'] || row['Preço de venda'] || row['precoVenda'] || row['Preço'] || row['Custo Unitário'] || row['Custo unitário'] || row['custoUnitario'] || 0),
         quantidade: 1,
       }));
 
