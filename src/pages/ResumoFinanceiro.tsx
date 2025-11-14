@@ -43,6 +43,7 @@ export default function ResumoFinanceiro() {
   const [alcada, setAlcada] = useState('');
   const [lucroLiquidoMesPrv, setLucroLiquidoMesPrv] = useState(0);
   const [vplPrv, setVplPrv] = useState(0);
+  const [vplDoProjeto, setVplDoProjeto] = useState(0);
 
   // Estados para cálculos de mês zero
   const [margemDiretaMesZero, setMargemDiretaMesZero] = useState(0);
@@ -113,26 +114,9 @@ export default function ResumoFinanceiro() {
     const irCsllCalc = ebitdaCalc * 0.34;
     setIrCsll(irCsllCalc);
 
-    // Lucro Líquido = Margem Direta - IR/CSLL (34%)
-    const lucroLiquidoCalc = margemDiretaCalc - irCsllCalc;
-    setLucroLiquido(lucroLiquidoCalc);
-
-    // Margem Líquida = (Lucro Líquido ÷ Receita Líquida) × 100
-    const margemLiquidaCalc = receitaLiquidaCalc > 0 ? (lucroLiquidoCalc / receitaLiquidaCalc) * 100 : 0;
-    setMargemLiquida(margemLiquidaCalc);
-
-    // Alçada de aprovação baseada na margem líquida
-    const alcadas = adminSettings.alcadas;
-    let alcadaCalc = '';
-    
-    if (margemLiquidaCalc >= alcadas.preVendas) {
-      alcadaCalc = 'Pré Vendas';
-    } else if (margemLiquidaCalc >= alcadas.diretor) {
-      alcadaCalc = 'Diretor';
-    } else {
-      alcadaCalc = 'CDG';
-    }
-    setAlcada(alcadaCalc);
+    // Lucro líquido - mês PRV = EBITDA − IR/CSLL (34%)
+    const lucroLiquidoMesPrvCalc = ebitdaCalc - irCsllCalc;
+    setLucroLiquidoMesPrv(lucroLiquidoMesPrvCalc);
 
     // Cálculos de mês zero
     // Margem Direta - mês zero = Impostos + Custo Total
@@ -155,15 +139,36 @@ export default function ResumoFinanceiro() {
     const lucroLiquidoMesZeroCalc = irCsllMesZeroCalc - margemEbitMesZeroCalc;
     setLucroLiquidoMesZero(lucroLiquidoMesZeroCalc);
 
-    // Lucro líquido - mês PRV = EBITDA − IR/CSLL (34%)
-    const lucroLiquidoMesPrvCalc = ebitdaCalc - irCsllCalc;
-    setLucroLiquidoMesPrv(lucroLiquidoMesPrvCalc);
-
     // VPL (PRV) = Lucro líquido - mês PRV ÷ coeficiente
     const prv = config?.prv || 30;
     const coeficiente = COEFICIENTES[prv] || COEFICIENTES[30];
     const vplPrvCalc = lucroLiquidoMesPrvCalc / coeficiente;
     setVplPrv(vplPrvCalc);
+
+    // Lucro Líquido = Lucro líquido - mês PRV + Lucro líquido - mês zero
+    const lucroLiquidoCalc = lucroLiquidoMesPrvCalc + lucroLiquidoMesZeroCalc;
+    setLucroLiquido(lucroLiquidoCalc);
+
+    // VPL do projeto = VPL (PRV) + Lucro líquido - mês zero
+    const vplDoProjetoCalc = vplPrvCalc + lucroLiquidoMesZeroCalc;
+    setVplDoProjeto(vplDoProjetoCalc);
+
+    // Margem Líquida = (Lucro Líquido ÷ Receita Líquida) × 100
+    const margemLiquidaCalc = receitaLiquidaCalc > 0 ? (lucroLiquidoCalc / receitaLiquidaCalc) * 100 : 0;
+    setMargemLiquida(margemLiquidaCalc);
+
+    // Alçada de aprovação baseada na margem líquida
+    const alcadas = adminSettings.alcadas;
+    let alcadaCalc = '';
+    
+    if (margemLiquidaCalc >= alcadas.preVendas) {
+      alcadaCalc = 'Pré Vendas';
+    } else if (margemLiquidaCalc >= alcadas.diretor) {
+      alcadaCalc = 'Diretor';
+    } else {
+      alcadaCalc = 'CDG';
+    }
+    setAlcada(alcadaCalc);
 
   }, [selectedQuote, quoteProducts, rateioServices, quoteConfigs, adminSettings]);
 
@@ -532,9 +537,9 @@ export default function ResumoFinanceiro() {
         </Card>
 
         <Card className="p-6 border-2 border-primary">
-          <Label className="text-sm text-muted-foreground">VPL (PRV)</Label>
+          <Label className="text-sm text-muted-foreground">VPL do projeto</Label>
           <div className="mt-2 text-3xl font-bold text-primary">
-            {formatCurrency(vplPrv)}
+            {formatCurrency(vplDoProjeto)}
           </div>
         </Card>
       </div>
