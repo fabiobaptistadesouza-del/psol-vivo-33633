@@ -15,11 +15,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 // Tabela de coeficientes baseada no PRV
 const COEFICIENTES: Record<number, number> = {
-  30: 1.01417439548488,
-  45: 1.02854970445713,
-  60: 1.02854970445713,
-  75: 1.043128775,
-  90: 1.043128775,
+  30: 1.01698633663687,
+  45: 1.03426120890608,
+  60: 1.03426120890608,
+  75: 1.05182951797102,
+  90: 1.05182951797102,
 };
 
 export default function ResumoFinanceiro() {
@@ -41,6 +41,8 @@ export default function ResumoFinanceiro() {
   const [margemLiquida, setMargemLiquida] = useState(0);
   const [vpl, setVpl] = useState(0);
   const [alcada, setAlcada] = useState('');
+  const [lucroLiquidoMesPrv, setLucroLiquidoMesPrv] = useState(0);
+  const [vplPrv, setVplPrv] = useState(0);
 
   // Estados para cálculos de mês zero
   const [margemDiretaMesZero, setMargemDiretaMesZero] = useState(0);
@@ -75,8 +77,8 @@ export default function ResumoFinanceiro() {
     const impostosCalc = receitaBrutaCalc * 0.25;
     setImpostos(impostosCalc);
 
-    // Receita Líquida = Receita Bruta - Impostos
-    const receitaLiquidaCalc = receitaBrutaCalc - impostosCalc;
+    // Receita Líquida = Receita Bruta
+    const receitaLiquidaCalc = receitaBrutaCalc;
     setReceitaLiquida(receitaLiquidaCalc);
 
     // Custo do Produto = soma da coluna "custo" (custoUnitario * quantidade)
@@ -91,24 +93,24 @@ export default function ResumoFinanceiro() {
     const custoTotalCalc = custoProdutoCalc + rateioCalc;
     setCustoTotal(custoTotalCalc);
 
-    // Margem Direta = Receita Líquida - Custo Total
-    const margemDiretaCalc = receitaLiquidaCalc - custoTotalCalc;
+    // Margem Direta = Receita Bruta
+    const margemDiretaCalc = receitaBrutaCalc;
     setMargemDireta(margemDiretaCalc);
 
     // Inadimplência = 0 (fixo)
     const inadimplenciaCalc = 0;
     setInadimplencia(inadimplenciaCalc);
 
-    // EBITDA = Margem Direta - Inadimplência
-    const ebitdaCalc = margemDiretaCalc - inadimplenciaCalc;
+    // EBITDA = Receita Bruta
+    const ebitdaCalc = receitaBrutaCalc;
     setEbitda(ebitdaCalc);
 
     // Margem EBITDA = (EBITDA ÷ Receita Líquida) × 100
     const margemEbitdaCalc = receitaLiquidaCalc > 0 ? (ebitdaCalc / receitaLiquidaCalc) * 100 : 0;
     setMargemEbitda(margemEbitdaCalc);
 
-    // IR/CSLL (34%) = Margem Direta × 0,34
-    const irCsllCalc = margemDiretaCalc * 0.34;
+    // IR/CSLL (34%) = 0,34 × EBITDA
+    const irCsllCalc = ebitdaCalc * 0.34;
     setIrCsll(irCsllCalc);
 
     // Lucro Líquido = Margem Direta - IR/CSLL (34%)
@@ -118,12 +120,6 @@ export default function ResumoFinanceiro() {
     // Margem Líquida = (Lucro Líquido ÷ Receita Líquida) × 100
     const margemLiquidaCalc = receitaLiquidaCalc > 0 ? (lucroLiquidoCalc / receitaLiquidaCalc) * 100 : 0;
     setMargemLiquida(margemLiquidaCalc);
-
-    // VPL = Lucro Líquido ÷ Coeficiente
-    const prv = config?.prv || 30;
-    const coeficiente = COEFICIENTES[prv] || COEFICIENTES[30];
-    const vplCalc = lucroLiquidoCalc / coeficiente;
-    setVpl(vplCalc);
 
     // Alçada de aprovação baseada na margem líquida
     const alcadas = adminSettings.alcadas;
@@ -158,6 +154,16 @@ export default function ResumoFinanceiro() {
     // Lucro líquido - mês zero = IR/CSLL - mês zero − Margem Ebit - mês zero
     const lucroLiquidoMesZeroCalc = irCsllMesZeroCalc - margemEbitMesZeroCalc;
     setLucroLiquidoMesZero(lucroLiquidoMesZeroCalc);
+
+    // Lucro líquido - mês PRV = EBITDA − IR/CSLL (34%)
+    const lucroLiquidoMesPrvCalc = ebitdaCalc - irCsllCalc;
+    setLucroLiquidoMesPrv(lucroLiquidoMesPrvCalc);
+
+    // VPL (PRV) = Lucro líquido - mês PRV ÷ coeficiente
+    const prv = config?.prv || 30;
+    const coeficiente = COEFICIENTES[prv] || COEFICIENTES[30];
+    const vplPrvCalc = lucroLiquidoMesPrvCalc / coeficiente;
+    setVplPrv(vplPrvCalc);
 
   }, [selectedQuote, quoteProducts, rateioServices, quoteConfigs, adminSettings]);
 
@@ -480,6 +486,30 @@ export default function ResumoFinanceiro() {
                   readOnly
                 />
               </div>
+
+              <div>
+                <Label htmlFor="lucroLiquidoMesPrv">Lucro líquido - mês PRV</Label>
+                <Input
+                  id="lucroLiquidoMesPrv"
+                  type="text"
+                  value={formatCurrency(lucroLiquidoMesPrv)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="vplPrv">VPL (PRV)</Label>
+                <Input
+                  id="vplPrv"
+                  type="text"
+                  value={formatCurrency(vplPrv)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
             </div>
           </CollapsibleContent>
         </Collapsible>
@@ -502,9 +532,9 @@ export default function ResumoFinanceiro() {
         </Card>
 
         <Card className="p-6 border-2 border-primary">
-          <Label className="text-sm text-muted-foreground">VPL</Label>
+          <Label className="text-sm text-muted-foreground">VPL (PRV)</Label>
           <div className="mt-2 text-3xl font-bold text-primary">
-            {formatCurrency(vpl)}
+            {formatCurrency(vplPrv)}
           </div>
         </Card>
       </div>
