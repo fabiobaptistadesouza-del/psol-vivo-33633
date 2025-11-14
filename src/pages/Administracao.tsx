@@ -7,9 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from '@/hooks/use-toast';
 import { Upload, FileText, AlertCircle, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import { Product } from '@/types';
 
 export default function Administracao() {
-  const { adminSettings, updateAdminSettings } = useApp();
+  const { adminSettings, updateAdminSettings, setLpuProducts } = useApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cashFlowFileInputRef = useRef<HTMLInputElement>(null);
   
@@ -27,7 +29,7 @@ export default function Administracao() {
     });
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -40,21 +42,50 @@ export default function Administracao() {
       return;
     }
 
-    const today = new Date().toLocaleDateString('pt-BR');
-    updateAdminSettings({
-      lpuFile: {
-        name: file.name,
-        uploadDate: today,
-      },
-    });
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-    toast({ 
-      title: 'LPU enviada com sucesso',
-      description: `Arquivo "${file.name}" foi carregado`
-    });
+      const products: Product[] = jsonData.map((row: any, index: number) => ({
+        id: `lpu-${index + 1}`,
+        fabricante: row['Fabricante'] || row['fabricante'] || '',
+        partNumber: row['Part Number'] || row['partNumber'] || row['PartNumber'] || '',
+        descricao: row['Descrição'] || row['descricao'] || row['Descricao'] || '',
+        idFamiliaRange: row['ID Familia Range'] || row['idFamiliaRange'] || row['Família'] || '',
+        categoria: (row['Categoria'] || row['categoria'] || 'HW') as 'HW' | 'SW' | 'SERV',
+        variacaoCambial: row['Variação Cambial'] === 'Sim' || row['variacaoCambial'] === true || false,
+        custoUnitario: Number(row['Custo Unitário'] || row['custoUnitario'] || row['Custo'] || 0),
+        precoVenda: Number(row['Preço de Venda'] || row['precoVenda'] || row['Preço'] || row['Custo Unitário'] || row['custoUnitario'] || 0),
+        quantidade: 1,
+      }));
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      setLpuProducts(products);
+
+      const today = new Date().toLocaleDateString('pt-BR');
+      updateAdminSettings({
+        lpuFile: {
+          name: file.name,
+          uploadDate: today,
+        },
+      });
+
+      toast({ 
+        title: 'LPU enviada com sucesso',
+        description: `Arquivo "${file.name}" foi carregado com ${products.length} produtos`
+      });
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      toast({
+        title: 'Erro ao processar arquivo',
+        description: 'Verifique se o arquivo Excel está no formato correto',
+        variant: 'destructive',
+      });
     }
   };
 

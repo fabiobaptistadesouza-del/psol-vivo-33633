@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Client, Quote, QuoteConfig, QuoteProduct, RateioService, ClientContacts, AdminSettings, QuoteCashFlowFile } from '@/types';
+import { Client, Quote, QuoteConfig, QuoteProduct, RateioService, ClientContacts, AdminSettings, QuoteCashFlowFile, Product } from '@/types';
 import { mockClients, mockQuotes, mockAdminSettings } from '@/data/mockData';
 
 interface AppContextType {
@@ -39,6 +39,8 @@ interface AppContextType {
   // Admin
   adminSettings: AdminSettings;
   updateAdminSettings: (settings: Partial<AdminSettings>) => void;
+  lpuProducts: Product[];
+  setLpuProducts: (products: Product[]) => void;
   
   // Cash Flow Files
   quoteCashFlowFiles: Record<string, QuoteCashFlowFile>;
@@ -58,6 +60,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [clientContacts, setClientContacts] = useState<Record<string, ClientContacts>>({});
   const [adminSettings, setAdminSettings] = useState<AdminSettings>(mockAdminSettings);
   const [quoteCashFlowFiles, setQuoteCashFlowFiles] = useState<Record<string, QuoteCashFlowFile>>({});
+  const [lpuProducts, setLpuProducts] = useState<Product[]>([]);
 
   const createQuote = (quote: Omit<Quote, 'id'>) => {
     const newQuote: Quote = {
@@ -210,6 +213,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         updateClientContacts,
         adminSettings,
         updateAdminSettings,
+        lpuProducts,
+        setLpuProducts,
         quoteCashFlowFiles,
         setQuoteCashFlowFile,
       }}
