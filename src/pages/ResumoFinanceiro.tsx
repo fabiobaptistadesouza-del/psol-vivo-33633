@@ -51,6 +51,7 @@ export default function ResumoFinanceiro() {
   const [margemEbitMesZero, setMargemEbitMesZero] = useState(0);
   const [irCsllMesZero, setIrCsllMesZero] = useState(0);
   const [lucroLiquidoMesZero, setLucroLiquidoMesZero] = useState(0);
+  const [vplMesUm, setVplMesUm] = useState(0);
 
   // Estados para controle de expansão das seções
   const [isCustoOpen, setIsCustoOpen] = useState(false);
@@ -138,6 +139,10 @@ export default function ResumoFinanceiro() {
     // Lucro líquido - mês zero = IR/CSLL - mês zero − Margem Ebit - mês zero
     const lucroLiquidoMesZeroCalc = irCsllMesZeroCalc - margemEbitMesZeroCalc;
     setLucroLiquidoMesZero(lucroLiquidoMesZeroCalc);
+
+    // VPL - mês um = Lucro líquido - mês zero ÷ 1.01698633663687
+    const vplMesUmCalc = lucroLiquidoMesZeroCalc / 1.01698633663687;
+    setVplMesUm(vplMesUmCalc);
 
     // VPL (PRV) = Lucro líquido - mês PRV ÷ coeficiente
     const prv = config?.prv || 30;
@@ -399,6 +404,18 @@ export default function ResumoFinanceiro() {
                   id="lucroLiquidoMesZero"
                   type="text"
                   value={formatCurrency(lucroLiquidoMesZero)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="vplMesUm">VPL - mês um</Label>
+                <Input
+                  id="vplMesUm"
+                  type="text"
+                  value={formatCurrency(vplMesUm)}
                   placeholder="R$ 0,00"
                   className="mt-2 bg-muted"
                   readOnly
