@@ -158,9 +158,9 @@ export default function ResumoFinanceiro() {
     const vplDoProjetoCalc = vplPrvCalc + vplMesUmCalc;
     setVplDoProjeto(vplDoProjetoCalc);
 
-    // Margem Líquida = (Lucro líquido - mês PRV + Lucro líquido - mês um) ÷ (Impostos + Receita Líquida) × 100
+    // Margem Líquida = Lucro Líquido ÷ (Impostos + Receita Líquida) × 100
     const denominador = impostosCalc + receitaLiquidaCalc;
-    const margemLiquidaCalc = denominador > 0 ? ((lucroLiquidoMesPrvCalc + lucroLiquidoMesZeroCalc) / denominador) * 100 : 0;
+    const margemLiquidaCalc = denominador > 0 ? (lucroLiquidoCalc / denominador) * 100 : 0;
     setMargemLiquida(margemLiquidaCalc);
 
     // Alçada de aprovação baseada na margem líquida
