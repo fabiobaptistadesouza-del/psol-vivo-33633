@@ -351,7 +351,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="margemDiretaMesZero">Margem Direta - mês zero</Label>
+                <Label htmlFor="margemDiretaMesZero">Margem Direta - mês um</Label>
                 <Input
                   id="margemDiretaMesZero"
                   type="text"
@@ -363,7 +363,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="ebitdaMesZero">Ebitda - mês zero</Label>
+                <Label htmlFor="ebitdaMesZero">Ebitda - mês um</Label>
                 <Input
                   id="ebitdaMesZero"
                   type="text"
@@ -375,7 +375,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="margemEbitMesZero">Margem Ebit - mês zero</Label>
+                <Label htmlFor="margemEbitMesZero">Margem Ebit - mês um</Label>
                 <Input
                   id="margemEbitMesZero"
                   type="text"
@@ -387,7 +387,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="irCsllMesZero">IR/CSLL - mês zero</Label>
+                <Label htmlFor="irCsllMesZero">IR/CSLL (34%) - mês um</Label>
                 <Input
                   id="irCsllMesZero"
                   type="text"
@@ -399,7 +399,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="lucroLiquidoMesZero">Lucro líquido - mês zero</Label>
+                <Label htmlFor="lucroLiquidoMesZero">Lucro líquido - mês um</Label>
                 <Input
                   id="lucroLiquidoMesZero"
                   type="text"
