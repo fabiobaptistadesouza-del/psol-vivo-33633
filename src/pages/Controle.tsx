@@ -49,9 +49,8 @@ export default function Controle() {
 
   const today = new Date();
   const validadeProposta = new Date(today);
-  validadeProposta.setDate(validadeProposta.getDate() + 7);
-  const inicioReceita = new Date(today);
-  inicioReceita.setDate(inicioReceita.getDate() + 30);
+  validadeProposta.setDate(validadeProposta.getDate() + 5);
+  const inicioReceita = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
   const config = quoteConfigs[selectedQuote.id] || {
     quoteId: selectedQuote.id,
