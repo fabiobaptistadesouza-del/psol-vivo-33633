@@ -12,7 +12,7 @@ import Rateio from "./pages/Rateio";
 import ResumoFinanceiro from "./pages/ResumoFinanceiro";
 import Contatos from "./pages/Contatos";
 import Administracao from "./pages/Administracao";
-import Sintegra from "./pages/Sintegra";
+
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,7 +33,7 @@ const App = () => (
               <Route path="/resumo-financeiro" element={<ResumoFinanceiro />} />
               <Route path="/contatos" element={<Contatos />} />
               <Route path="/administracao" element={<Administracao />} />
-              <Route path="/sintegra" element={<Sintegra />} />
+              
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
