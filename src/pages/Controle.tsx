@@ -60,6 +60,7 @@ export default function Controle() {
     prv: 30 as const,
     insumosDolar: false,
     clausulaReajustePtax: false,
+    validadePropostaDias: 5,
     validadeProposta: validadeProposta.toLocaleDateString('pt-BR'),
     inicioReceita: inicioReceita.toLocaleDateString('pt-BR'),
     classificacaoCliente: 'Normal' as const,
@@ -305,7 +306,23 @@ export default function Controle() {
                 <RadioGroupItem value="nao" id="clausula-nao" />
                 <Label htmlFor="clausula-nao" className="font-normal cursor-pointer">Não</Label>
               </div>
-            </RadioGroup>
+          </RadioGroup>
+          </div>
+
+          {/* Validade da Proposta (dias) */}
+          <div>
+            <Label>Validade da proposta (dias)</Label>
+            <Input 
+              type="number"
+              min={0}
+              max={99}
+              value={config.validadePropostaDias ?? 5}
+              onChange={(e) => {
+                const value = Math.min(99, Math.max(0, parseInt(e.target.value) || 0));
+                handleConfigChange({ validadePropostaDias: value });
+              }}
+              className="mt-2 w-24" 
+            />
           </div>
 
           {/* Validade da Proposta */}

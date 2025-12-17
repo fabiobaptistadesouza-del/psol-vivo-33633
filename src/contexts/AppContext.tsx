@@ -99,6 +99,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           prv: 30 as const,
           insumosDolar: false,
           clausulaReajustePtax: false,
+          validadePropostaDias: 5,
           validadeProposta: validadeProposta.toLocaleDateString('pt-BR'),
           inicioReceita: inicioReceita.toLocaleDateString('pt-BR'),
           classificacaoCliente: 'Normal' as const,
