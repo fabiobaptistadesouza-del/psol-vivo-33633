@@ -319,7 +319,12 @@ export default function Controle() {
               value={config.validadePropostaDias ?? 5}
               onChange={(e) => {
                 const value = Math.min(99, Math.max(0, parseInt(e.target.value) || 0));
-                handleConfigChange({ validadePropostaDias: value });
+                const novaValidadeProposta = new Date();
+                novaValidadeProposta.setDate(novaValidadeProposta.getDate() + value);
+                handleConfigChange({ 
+                  validadePropostaDias: value,
+                  validadeProposta: novaValidadeProposta.toLocaleDateString('pt-BR')
+                });
               }}
               className="mt-2 w-24" 
             />
