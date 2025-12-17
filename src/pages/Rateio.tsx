@@ -71,7 +71,7 @@ export default function Rateio() {
   const handleSave = () => {
     if (!selectedQuote) return;
 
-    if (!formData.servico || !formData.descricaoServico || !formData.fornecedor) {
+    if (!formData.servico || !formData.descricaoServico || !formData.fornecedor || !formData.naturezaItem) {
       toast({
         title: 'Campos obrigatórios',
         description: 'Preencha todos os campos obrigatórios',
@@ -200,6 +200,21 @@ export default function Rateio() {
                     {DESCRICAO_OPTIONS.map((opt) => (
                       <SelectItem key={opt} value={opt}>{opt}</SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2">
+                <Label>Natureza do Item *</Label>
+                <Select
+                  value={formData.naturezaItem}
+                  onValueChange={(value: 'CAPEX' | 'OPEX') => setFormData({ ...formData, naturezaItem: value })}
+                >
+                  <SelectTrigger className="bg-background">
+                    <SelectValue placeholder="Selecione a natureza" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card">
+                    <SelectItem value="CAPEX">CAPEX</SelectItem>
+                    <SelectItem value="OPEX">OPEX</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

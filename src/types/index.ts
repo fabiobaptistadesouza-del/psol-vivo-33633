@@ -62,6 +62,7 @@ export interface RateioService {
   sgiTis: 'COMP' | 'MODI' | 'MOIN' | 'Outros' | 'Nenhum';
   servico: 'Instalação' | 'Logística' | 'Logística para Transferência entre Filiais Transferência' | 'Armazenagem' | 'Gerente de Projetos' | 'Líder Técnico' | 'Reserva Técnica e Miscelâneas';
   descricaoServico: 'Instalação' | 'Logística' | 'Logística para Transferência entre Filiais Transferência' | 'Armazenagem' | 'Gerente de Projetos Interno' | 'Líder Técnico Interno' | 'Despesas diversas';
+  naturezaItem: 'CAPEX' | 'OPEX';
   importado: boolean;
   fornecedor: '11 Paths' | '2S' | '3Corp' | '5Dimensão' | '5WI' | '9Net';
   valorComImpostos: number;
