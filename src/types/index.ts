@@ -25,6 +25,7 @@ export interface QuoteConfig {
   prv: 30 | 45 | 60 | 75 | 90;
   insumosDolar: boolean;
   clausulaReajustePtax: boolean;
+  validadePropostaDias: number;
   validadeProposta: string;
   inicioReceita: string;
   classificacaoCliente: 'Normal' | 'Microempresa';
