@@ -1,4 +1,4 @@
-import { FileText, Package, Users, Settings, DollarSign, Calculator, Search } from 'lucide-react';
+import { FileText, Package, Users, Settings, DollarSign, Calculator } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import {
   Sidebar,
@@ -19,7 +19,7 @@ const menuItems = [
   { title: 'Contatos', url: '/contatos', icon: Users },
   { title: 'Resumo Financeiro', url: '/resumo-financeiro', icon: Calculator },
   { title: 'Administração', url: '/administracao', icon: Settings },
-  { title: 'Sintegra', url: '/sintegra', icon: Search },
+  
 ];
 
 export function AppSidebar() {
