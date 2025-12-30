@@ -325,6 +325,7 @@ export const mockAdminSettings: AdminSettings = {
     diretor: 7,
     cdg: 0
   },
+  inadimplencia: 0,
   lpuFile: {
     name: 'LPU_2024_Q1.xlsx',
     uploadDate: '15/01/2024'
