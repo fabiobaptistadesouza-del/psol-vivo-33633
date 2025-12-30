@@ -21,11 +21,21 @@ export default function Administracao() {
     cdg: adminSettings.alcadas.cdg,
   });
 
+  const [inadimplencia, setInadimplencia] = useState(adminSettings.inadimplencia || 0);
+
   const handleAlcadasSave = () => {
     updateAdminSettings({ alcadas });
     toast({ 
       title: 'Alçadas atualizadas com sucesso',
       description: 'As mudanças afetarão todas as cotações do sistema'
+    });
+  };
+
+  const handleParametrosSave = () => {
+    updateAdminSettings({ inadimplencia });
+    toast({ 
+      title: 'Parâmetros salvos com sucesso',
+      description: 'O valor de inadimplência foi atualizado'
     });
   };
 
@@ -314,6 +324,40 @@ export default function Administracao() {
                 Baixar template do arquivo que deve ser usado no upload do Fluxo de Caixa
               </a>
             </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Outros parâmetros</CardTitle>
+            <CardDescription>
+              Configure parâmetros adicionais do sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="max-w-xs">
+              <Label htmlFor="inadimplencia">Inadimplência (%)</Label>
+              <Input
+                id="inadimplencia"
+                type="number"
+                min={0}
+                max={99}
+                step={0.1}
+                value={inadimplencia}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0;
+                  if (value >= 0 && value <= 99) {
+                    setInadimplencia(value);
+                  }
+                }}
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <Button onClick={handleParametrosSave}>
+                Salvar parâmetros
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

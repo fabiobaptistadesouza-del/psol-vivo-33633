@@ -91,6 +91,7 @@ export interface AdminSettings {
     diretor: number;
     cdg: number;
   };
+  inadimplencia?: number;
   lpuFile?: {
     name: string;
     uploadDate: string;
