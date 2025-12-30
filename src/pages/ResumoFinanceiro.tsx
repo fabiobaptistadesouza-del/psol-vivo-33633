@@ -140,8 +140,8 @@ export default function ResumoFinanceiro() {
     const inadimplenciaMesUmCalc = impostosCalc * (inadimplenciaPercentualMesUm / 100);
     setInadimplenciaMesUm(inadimplenciaMesUmCalc);
 
-    // Margem Direta - mês zero = Impostos + Custo Total
-    const margemDiretaMesZeroCalc = impostosCalc + custoTotalCalc;
+    // Margem Direta - mês um = Impostos - mês um + Custo Total - mês um - Inadimplência - mês um
+    const margemDiretaMesZeroCalc = impostosCalc + custoTotalCalc - inadimplenciaMesUmCalc;
     setMargemDiretaMesZero(margemDiretaMesZeroCalc);
 
     // EBITDA - mês zero = Impostos + Custo Total
