@@ -110,14 +110,14 @@ export default function ResumoFinanceiro() {
     const custoTotalCalc = custoProdutoCalc + rateioCalc;
     setCustoTotal(custoTotalCalc);
 
-    // Margem Direta = Receita Bruta
-    const margemDiretaCalc = receitaBrutaCalc;
-    setMargemDireta(margemDiretaCalc);
-
-    // Inadimplência - mês PRV = Receita líquida - mês PRV × (Inadimplência (%) / 100)
+    // Margem Direta - mês PRV = Receita líquida - mês PRV - Inadimplência - mês PRV
+    // Nota: inadimplenciaCalc é calculado abaixo, então precisamos calcular aqui primeiro
     const inadimplenciaPercentual = adminSettings.inadimplencia || 0;
     const inadimplenciaCalc = receitaLiquidaCalc * (inadimplenciaPercentual / 100);
     setInadimplencia(inadimplenciaCalc);
+
+    const margemDiretaCalc = receitaLiquidaCalc - inadimplenciaCalc;
+    setMargemDireta(margemDiretaCalc);
 
     // EBITDA = Receita Bruta
     const ebitdaCalc = receitaBrutaCalc;
