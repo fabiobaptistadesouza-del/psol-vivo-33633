@@ -56,6 +56,20 @@ export default function ResumoFinanceiro() {
   // Estados para controle de expansão das seções
   const [isCustoOpen, setIsCustoOpen] = useState(false);
   const [isReceitaOpen, setIsReceitaOpen] = useState(false);
+  const [isConsolidadoOpen, setIsConsolidadoOpen] = useState(false);
+
+  // Estados para seção Consolidado
+  const [receitaBrutaConsolidado, setReceitaBrutaConsolidado] = useState(0);
+  const [impostosConsolidado, setImpostosConsolidado] = useState(0);
+  const [receitaLiquidaConsolidado, setReceitaLiquidaConsolidado] = useState(0);
+  const [custoConsolidado, setCustoConsolidado] = useState(0);
+  const [inadimplenciaConsolidado, setInadimplenciaConsolidado] = useState(0);
+  const [margemDiretaConsolidado, setMargemDiretaConsolidado] = useState(0);
+  const [custosIndiretosConsolidado, setCustosIndiretosConsolidado] = useState(0);
+  const [ebitdaConsolidado, setEbitdaConsolidado] = useState(0);
+  const [margemEbitdaConsolidado, setMargemEbitdaConsolidado] = useState(0);
+  const [margemEbitConsolidado, setMargemEbitConsolidado] = useState(0);
+  const [irCsllConsolidado, setIrCsllConsolidado] = useState(0);
 
   useEffect(() => {
     if (!selectedQuote) {
@@ -528,6 +542,153 @@ export default function ResumoFinanceiro() {
                   id="vplPrv"
                   type="text"
                   value={formatCurrency(vplPrv)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </Card>
+
+      {/* Seção 3: Consolidado */}
+      <Card className="p-6">
+        <Collapsible open={isConsolidadoOpen} onOpenChange={setIsConsolidadoOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h2 className="text-lg font-semibold">Consolidado</h2>
+            <ChevronDown 
+              className={`h-5 w-5 transition-transform duration-200 ${isConsolidadoOpen ? 'rotate-0' : '-rotate-90'}`}
+            />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="mt-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <Label htmlFor="receitaBrutaConsolidado">Receita bruta (consolidado)</Label>
+                <Input
+                  id="receitaBrutaConsolidado"
+                  type="text"
+                  value={formatCurrency(receitaBrutaConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="impostosConsolidado">Impostos (consolidado)</Label>
+                <Input
+                  id="impostosConsolidado"
+                  type="text"
+                  value={formatCurrency(impostosConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="receitaLiquidaConsolidado">Receita líquida (consolidado)</Label>
+                <Input
+                  id="receitaLiquidaConsolidado"
+                  type="text"
+                  value={formatCurrency(receitaLiquidaConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="custoConsolidado">Custo (consolidado)</Label>
+                <Input
+                  id="custoConsolidado"
+                  type="text"
+                  value={formatCurrency(custoConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="inadimplenciaConsolidado">Inadimplência (consolidado)</Label>
+                <Input
+                  id="inadimplenciaConsolidado"
+                  type="text"
+                  value={formatCurrency(inadimplenciaConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="margemDiretaConsolidado">Margem direta (consolidado)</Label>
+                <Input
+                  id="margemDiretaConsolidado"
+                  type="text"
+                  value={formatCurrency(margemDiretaConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="custosIndiretosConsolidado">Custos indiretos (consolidado)</Label>
+                <Input
+                  id="custosIndiretosConsolidado"
+                  type="text"
+                  value={formatCurrency(custosIndiretosConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="ebitdaConsolidado">Ebitda (consolidado)</Label>
+                <Input
+                  id="ebitdaConsolidado"
+                  type="text"
+                  value={formatCurrency(ebitdaConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="margemEbitdaConsolidado">Margem Ebitda (consolidado)</Label>
+                <Input
+                  id="margemEbitdaConsolidado"
+                  type="text"
+                  value={`${margemEbitdaConsolidado.toFixed(2)}%`}
+                  placeholder="0,00%"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="margemEbitConsolidado">Margem Ebit (consolidado)</Label>
+                <Input
+                  id="margemEbitConsolidado"
+                  type="text"
+                  value={formatCurrency(margemEbitConsolidado)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="irCsllConsolidado">IR/CSLL (consolidado)</Label>
+                <Input
+                  id="irCsllConsolidado"
+                  type="text"
+                  value={formatCurrency(irCsllConsolidado)}
                   placeholder="R$ 0,00"
                   className="mt-2 bg-muted"
                   readOnly
