@@ -190,6 +190,51 @@ export default function ResumoFinanceiro() {
     }
     setAlcada(alcadaCalc);
 
+    // ========== CÁLCULOS CONSOLIDADOS ==========
+    
+    // 1. Receita bruta (consolidado) = Receita bruta - mês PRV
+    const receitaBrutaConsolidadoCalc = receitaBrutaCalc;
+    setReceitaBrutaConsolidado(receitaBrutaConsolidadoCalc);
+    
+    // 2. Impostos (consolidado) = Impostos - mês um
+    const impostosConsolidadoCalc = impostosCalc;
+    setImpostosConsolidado(impostosConsolidadoCalc);
+    
+    // 3. Receita líquida (consolidado) = Receita bruta (consolidado) - Impostos (consolidado)
+    const receitaLiquidaConsolidadoCalc = receitaBrutaConsolidadoCalc - impostosConsolidadoCalc;
+    setReceitaLiquidaConsolidado(receitaLiquidaConsolidadoCalc);
+    
+    // 4. Custo (consolidado) = Custo Total - mês um
+    const custoConsolidadoCalc = custoTotalCalc;
+    setCustoConsolidado(custoConsolidadoCalc);
+    
+    // 5. Inadimplência (consolidado) = Receita líquida (consolidado) × (Inadimplência (%) / 100)
+    const inadimplenciaPercentual = adminSettings.inadimplencia || 0;
+    const inadimplenciaConsolidadoCalc = receitaLiquidaConsolidadoCalc * (inadimplenciaPercentual / 100);
+    setInadimplenciaConsolidado(inadimplenciaConsolidadoCalc);
+    
+    // 6. Margem direta (consolidado) = Receita líquida (consolidado) - Custo (consolidado) - Inadimplência (consolidado)
+    const margemDiretaConsolidadoCalc = receitaLiquidaConsolidadoCalc - custoConsolidadoCalc - inadimplenciaConsolidadoCalc;
+    setMargemDiretaConsolidado(margemDiretaConsolidadoCalc);
+    
+    // 7. Ebitda (consolidado) = EBITDA - mês PRV - Ebitda - mês um
+    const ebitdaConsolidadoCalc = ebitdaCalc - ebitdaMesZeroCalc;
+    setEbitdaConsolidado(ebitdaConsolidadoCalc);
+    
+    // 8. Margem Ebitda (consolidado) = Ebitda (consolidado) / Receita líquida (consolidado) × 100
+    const margemEbitdaConsolidadoCalc = receitaLiquidaConsolidadoCalc !== 0 
+      ? (ebitdaConsolidadoCalc / receitaLiquidaConsolidadoCalc) * 100 
+      : 0;
+    setMargemEbitdaConsolidado(margemEbitdaConsolidadoCalc);
+    
+    // 9. Margem Ebit (consolidado) = EBITDA - mês PRV - Ebitda - mês um (mesma fórmula do Ebitda consolidado)
+    const margemEbitConsolidadoCalc = ebitdaCalc - ebitdaMesZeroCalc;
+    setMargemEbitConsolidado(margemEbitConsolidadoCalc);
+    
+    // 10. IR/CSLL (consolidado) = IR/CSLL (34%) - mês PRV - IR/CSLL (34%) - mês um
+    const irCsllConsolidadoCalc = irCsllCalc - irCsllMesZeroCalc;
+    setIrCsllConsolidado(irCsllConsolidadoCalc);
+
   }, [selectedQuote, quoteProducts, rateioServices, quoteConfigs, adminSettings]);
 
   if (!selectedQuote) {
