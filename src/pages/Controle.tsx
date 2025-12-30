@@ -163,6 +163,7 @@ export default function Controle() {
         custoProduto,
         custoRateado,
         impostos,
+        adminSettings.inadimplencia || 0,
         cashFlowFile.fileData
       );
 

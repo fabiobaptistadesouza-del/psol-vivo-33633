@@ -116,6 +116,7 @@ export const updateCashFlowWithCalculations = async (
   custoProduto: number,
   custoRateado: number,
   impostos: number,
+  inadimplencia: number,
   uploadedFileData?: ArrayBuffer
 ): Promise<{ vpl: number; margem: number; margemPercentual: number; workbook: XLSX.WorkBook }> => {
   try {
@@ -239,6 +240,7 @@ export const updateCashFlowWithCalculations = async (
         'B15': custoProduto,         // Custo de Produto
         'B16': custoRateado,         // Custo Rateado
         'B18': impostos,             // Impostos
+        'B29': inadimplencia,        // Inadimplência (%)
         'DZ20': prv                  // PRV (célula adicional)
       };
 
