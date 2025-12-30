@@ -431,7 +431,7 @@ export default function ResumoFinanceiro() {
       <Card className="p-6">
         <Collapsible open={isReceitaOpen} onOpenChange={setIsReceitaOpen}>
           <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h2 className="text-lg font-semibold">Receita</h2>
+            <h2 className="text-lg font-semibold">Receita (apenas para validação)</h2>
             <ChevronDown 
               className={`h-5 w-5 transition-transform duration-200 ${isReceitaOpen ? 'rotate-0' : '-rotate-90'}`}
             />
