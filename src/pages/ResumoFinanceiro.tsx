@@ -271,7 +271,7 @@ export default function ResumoFinanceiro() {
 
         const fcUpdates = {
           'B13': receitaBruta,
-          'B29': adminSettings.inadimplencia || 0,
+          'B29': (adminSettings.inadimplencia || 0) / 100, // Converte % para decimal (1% -> 0.01)
           'B14': prv,
           'B15': custoProduto,
           'B16': rateio,
