@@ -46,6 +46,7 @@ export default function ResumoFinanceiro() {
   const [vplDoProjeto, setVplDoProjeto] = useState(0);
 
   // Estados para cálculos de mês zero
+  const [inadimplenciaMesUm, setInadimplenciaMesUm] = useState(0);
   const [margemDiretaMesZero, setMargemDiretaMesZero] = useState(0);
   const [ebitdaMesZero, setEbitdaMesZero] = useState(0);
   const [margemEbitMesZero, setMargemEbitMesZero] = useState(0);
@@ -134,6 +135,11 @@ export default function ResumoFinanceiro() {
     setLucroLiquidoMesPrv(lucroLiquidoMesPrvCalc);
 
     // Cálculos de mês zero
+    // Inadimplência - mês um = Impostos - mês um × (Inadimplência (%) / 100)
+    const inadimplenciaPercentualMesUm = adminSettings.inadimplencia || 0;
+    const inadimplenciaMesUmCalc = impostosCalc * (inadimplenciaPercentualMesUm / 100);
+    setInadimplenciaMesUm(inadimplenciaMesUmCalc);
+
     // Margem Direta - mês zero = Impostos + Custo Total
     const margemDiretaMesZeroCalc = impostosCalc + custoTotalCalc;
     setMargemDiretaMesZero(margemDiretaMesZeroCalc);
@@ -404,6 +410,18 @@ export default function ResumoFinanceiro() {
                   id="custoTotal"
                   type="text"
                   value={formatCurrency(custoTotal)}
+                  placeholder="R$ 0,00"
+                  className="mt-2 bg-muted"
+                  readOnly
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="inadimplenciaMesUm">Inadimplência - mês um</Label>
+                <Input
+                  id="inadimplenciaMesUm"
+                  type="text"
+                  value={formatCurrency(inadimplenciaMesUm)}
                   placeholder="R$ 0,00"
                   className="mt-2 bg-muted"
                   readOnly
