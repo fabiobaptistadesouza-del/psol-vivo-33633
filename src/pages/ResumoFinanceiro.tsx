@@ -114,8 +114,9 @@ export default function ResumoFinanceiro() {
     const margemDiretaCalc = receitaBrutaCalc;
     setMargemDireta(margemDiretaCalc);
 
-    // Inadimplência = 0 (fixo)
-    const inadimplenciaCalc = 0;
+    // Inadimplência - mês PRV = Receita líquida - mês PRV × (Inadimplência (%) / 100)
+    const inadimplenciaPercentual = adminSettings.inadimplencia || 0;
+    const inadimplenciaCalc = receitaLiquidaCalc * (inadimplenciaPercentual / 100);
     setInadimplencia(inadimplenciaCalc);
 
     // EBITDA = Receita Bruta
@@ -215,7 +216,6 @@ export default function ResumoFinanceiro() {
     setCustoConsolidado(custoConsolidadoCalc);
     
     // 5. Inadimplência (consolidado) = Receita líquida (consolidado) × (Inadimplência (%) / 100)
-    const inadimplenciaPercentual = adminSettings.inadimplencia || 0;
     const inadimplenciaConsolidadoCalc = receitaLiquidaConsolidadoCalc * (inadimplenciaPercentual / 100);
     setInadimplenciaConsolidado(inadimplenciaConsolidadoCalc);
     
