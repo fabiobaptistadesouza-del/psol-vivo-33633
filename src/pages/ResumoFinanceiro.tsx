@@ -453,7 +453,7 @@ export default function ResumoFinanceiro() {
           <CollapsibleContent className="mt-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div>
-                <Label htmlFor="receitaBruta">Receita Bruta</Label>
+                <Label htmlFor="receitaBruta">Receita bruta - mês PRV</Label>
                 <Input
                   id="receitaBruta"
                   type="text"
@@ -465,7 +465,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="receitaLiquida">Receita Líquida</Label>
+                <Label htmlFor="receitaLiquida">Receita líquida - mês PRV</Label>
                 <Input
                   id="receitaLiquida"
                   type="text"
@@ -477,7 +477,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="margemDireta">Margem Direta</Label>
+                <Label htmlFor="margemDireta">Margem direta - mês PRV</Label>
                 <Input
                   id="margemDireta"
                   type="text"
@@ -489,7 +489,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="inadimplencia">Inadimplência</Label>
+                <Label htmlFor="inadimplencia">Inadimplência - mês PRV</Label>
                 <Input
                   id="inadimplencia"
                   type="text"
@@ -501,7 +501,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="ebitda">EBITDA</Label>
+                <Label htmlFor="ebitda">EBITDA - mês PRV</Label>
                 <Input
                   id="ebitda"
                   type="text"
@@ -513,7 +513,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="irCsll">IR/CSLL (34%)</Label>
+                <Label htmlFor="irCsll">IR/CSLL (34%) - mês PRV</Label>
                 <Input
                   id="irCsll"
                   type="text"
@@ -537,7 +537,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="vplPrv">VPL (PRV)</Label>
+                <Label htmlFor="vplPrv">VPL - mês PRV</Label>
                 <Input
                   id="vplPrv"
                   type="text"
