@@ -148,8 +148,8 @@ export default function ResumoFinanceiro() {
     const ebitdaMesZeroCalc = impostosCalc + custoTotalCalc - inadimplenciaMesUmCalc;
     setEbitdaMesZero(ebitdaMesZeroCalc);
 
-    // Margem EBIT - mês zero = Impostos + Custo Total
-    const margemEbitMesZeroCalc = impostosCalc + custoTotalCalc;
+    // Margem EBIT - mês um = Impostos - mês um + Custo Total - mês um - Inadimplência - mês um
+    const margemEbitMesZeroCalc = impostosCalc + custoTotalCalc - inadimplenciaMesUmCalc;
     setMargemEbitMesZero(margemEbitMesZeroCalc);
 
     // IR/CSLL - mês zero = 0,34 × Margem Ebit - mês zero
