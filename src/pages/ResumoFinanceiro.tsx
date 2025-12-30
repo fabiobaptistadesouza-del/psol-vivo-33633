@@ -318,7 +318,7 @@ export default function ResumoFinanceiro() {
           <CollapsibleContent className="mt-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div>
-                <Label htmlFor="impostos">Impostos</Label>
+                <Label htmlFor="impostos">Impostos - mês um</Label>
                 <Input
                   id="impostos"
                   type="text"
@@ -330,7 +330,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="custoProduto">Custo do Produto</Label>
+                <Label htmlFor="custoProduto">Custo do Produto - mês um</Label>
                 <Input
                   id="custoProduto"
                   type="text"
@@ -342,7 +342,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="rateio">Rateio</Label>
+                <Label htmlFor="rateio">Rateio - mês um</Label>
                 <Input
                   id="rateio"
                   type="text"
@@ -354,7 +354,7 @@ export default function ResumoFinanceiro() {
               </div>
 
               <div>
-                <Label htmlFor="custoTotal">Custo Total</Label>
+                <Label htmlFor="custoTotal">Custo Total - mês um</Label>
                 <Input
                   id="custoTotal"
                   type="text"
