@@ -296,7 +296,7 @@ export default function ResumoFinanceiro() {
       <Card className="p-6">
         <Collapsible open={isCustoOpen} onOpenChange={setIsCustoOpen}>
           <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h2 className="text-lg font-semibold">Custo + impostos</h2>
+            <h2 className="text-lg font-semibold">Custo + impostos (apenas para validação)</h2>
             <ChevronDown 
               className={`h-5 w-5 transition-transform duration-200 ${isCustoOpen ? 'rotate-0' : '-rotate-90'}`}
             />
