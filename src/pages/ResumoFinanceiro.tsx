@@ -119,8 +119,8 @@ export default function ResumoFinanceiro() {
     const margemDiretaCalc = receitaLiquidaCalc - inadimplenciaCalc;
     setMargemDireta(margemDiretaCalc);
 
-    // EBITDA = Receita Bruta
-    const ebitdaCalc = receitaBrutaCalc;
+    // EBITDA - mês PRV = Margem direta - mês PRV
+    const ebitdaCalc = margemDiretaCalc;
     setEbitda(ebitdaCalc);
 
     // Margem EBITDA = (EBITDA ÷ Receita Líquida) × 100
