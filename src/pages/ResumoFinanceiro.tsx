@@ -15,11 +15,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 // Tabela de coeficientes baseada no PRV
 const COEFICIENTES: Record<number, number> = {
-  30: 1.01698633663687,
-  45: 1.03426120890608,
-  60: 1.03426120890608,
-  75: 1.05182951797102,
-  90: 1.05182951797102,
+  30: 1.01566133704744,
+  45: 1.03156795157299,
+  60: 1.03156795157299,
+  75: 1.0477236849499,
+  90: 1.0477236849499,
 };
 
 export default function ResumoFinanceiro() {
