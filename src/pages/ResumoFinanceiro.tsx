@@ -161,8 +161,8 @@ export default function ResumoFinanceiro() {
     const lucroLiquidoMesZeroCalc = irCsllMesZeroCalc - margemEbitMesZeroCalc;
     setLucroLiquidoMesZero(lucroLiquidoMesZeroCalc);
 
-    // VPL - mês um = Lucro líquido - mês um
-    const vplMesUmCalc = lucroLiquidoMesZeroCalc;
+    // VPL - mês um = Lucro líquido - mês um / 1,01566133704744
+    const vplMesUmCalc = lucroLiquidoMesZeroCalc / 1.01566133704744;
     setVplMesUm(vplMesUmCalc);
 
     // VPL (PRV) = Lucro líquido - mês PRV ÷ coeficiente
